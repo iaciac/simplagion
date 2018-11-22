@@ -35,7 +35,7 @@ def generate_my_simplicial_complex_d2(N,k1,k2):
         Returns
         -------
         node_neighbors_dict: dict
-        Dictionary nodes as keys and lists of neighbors as values.
+        Dictionary having nodes as keys and lists of neighbors as values.
         
         triangles_list: list
         List of 2-simplices generated [(i,j,k),...]
