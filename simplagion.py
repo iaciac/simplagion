@@ -38,7 +38,7 @@ def generate_my_simplicial_complex_d2(N,k1,k2):
         Dictionary nodes as keys and lists of neighbors as values.
         
         triangles_list: list
-        List of 2-simplices generated [(i,k,k),...]
+        List of 2-simplices generated [(i,j,k),...]
         
         avg_n_triangles: float
         Average number of 2-simplices
