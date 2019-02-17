@@ -53,7 +53,7 @@ def generate_my_simplicial_complex_d2(N,k1,k2):
         
     #Calculating - approximated - probabilities
     p2 = (2.*k2)/((N-1.)*(N-2.))
-    p1 = (k1 - 2.*k2)/(N-1.)
+    p1 = (k1 - 2.*k2)/(N-1-2.*k2)
     if (p1<0) or (p2<0): raise ValueError('Negative probability!')
     
     #I first generate a standard ER graph with edges connected with probability p1
