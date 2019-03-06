@@ -3,7 +3,7 @@ The python notebooks contain some functions to reproduce simulations and analyse
 
 Citation
 ----------
-I. Iacopini et al. (2018) Simplicial Models of Social Contagion. arXiv preprint arXiv:1810.07031.
+I. Iacopini, G. Petri, A. Barrat & V. Latora (2018) Simplicial Models of Social Contagion. arXiv preprint arXiv:1810.07031.
 
 Abstract
 ----------
