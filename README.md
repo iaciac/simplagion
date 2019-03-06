@@ -1,4 +1,4 @@
-# Code for Simplicial Models of Social Contagion
+# Code for "Simplicial Models of Social Contagion
 The python notebooks contain some functions to reproduce simulations and analyses of the [paper](https://arxiv.org/abs/1810.07031).
 
 Citation
