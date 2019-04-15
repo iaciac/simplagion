@@ -14,7 +14,6 @@ Dependencies
 ------------
 * Numpy 1.15.3
 * NetworkX 2.1
-* Simplicial 0.4.2
 
 
 
