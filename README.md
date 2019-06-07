@@ -4,6 +4,7 @@ The notebooks (Python 2.7, yes... I know) contain some functions to reproduce si
 Citation
 ----------
 I. Iacopini, G. Petri, A. Barrat & V. Latora (2019)
+
 *Simplicial Models of Social Contagion*, Nature Communications 10(1), 2485.
 
 Abstract
