@@ -6,6 +6,7 @@ import numpy as np
 import random
 import json
 import pickle
+import copy
 
 
 #model constructor
@@ -17,7 +18,7 @@ class SimplagionModel():
         self.triangles_list = triangles_list
         self.nodes = list(node_neighbors_dict.keys())
         self.N = len(node_neighbors_dict.keys())
-        self.I = I_percentage * self.N/100
+        self.I = int(I_percentage * self.N/100)
         
         #Initial setup
         #I save the infected nodes of the first initialisation in case I want to repeat several runs with 
@@ -42,7 +43,7 @@ class SimplagionModel():
         #infect nodes
         if fixed_nodes_to_infect==None: #the first time I create the model (the instance __init__)
             infected_this_setup=[]
-            for ite in xrange(self.I): #we will infect I agents
+            for ite in range(self.I): #we will infect I agents
                 #select one to infect among the supsceptibles
                 to_infect = random.choice(list(self.sAgentSet))
                 self.infectAgent(to_infect)
@@ -132,7 +133,7 @@ class SimplagionModel():
             self.t += 1
 
         #and when we're done, return all of the relevant information
-        if print_status: print 'beta1', beta1, 'Done!', len(self.iAgentSet), 'infected agents left'
+        if print_status: print('beta1', beta1, 'Done!', len(self.iAgentSet), 'infected agents left')
 
         return self.iList
     
@@ -154,14 +155,14 @@ class SimplagionModel():
 def run_one_simulation(args):
     
     it_num, N, p1, p2, lambda1s, lambdaD_target, I_percentage, t_max, mu  = args
-    print 'It %i initialized'%it_num
+    print('It %i initialized'%it_num)
     
     node_neighbors_dict, triangles_list = generate_my_simplicial_complex_d2(N,p1,p2)
 
     real_k = 1.*sum([len(v) for v  in node_neighbors_dict.values()])/len(node_neighbors_dict)
     real_kD = 3.*len(triangles_list)/len(node_neighbors_dict)
 
-    print 'It %i, created SC with k1=%.1f and k2=%.1f'%(it_num,real_k,real_kD)
+    print('It %i, created SC with k1=%.1f and k2=%.1f'%(it_num,real_k,real_kD))
     
     beta1s = 1.*(mu/real_k)*lambda1s
     beta2 = 1.*(mu/real_kD)*lambdaD_target
@@ -175,7 +176,7 @@ def run_one_simulation(args):
         rho = mySimplagionModel.get_stationary_rho(normed=True, last_k_values = 100)
         rhos.append(rho)
 
-    print 'It %i, simulation has finished'%(it_num)
+    print('It %i, simulation has finished'%(it_num))
 
     return rhos, real_k, real_kD
 
@@ -188,11 +189,12 @@ def generate_my_simplicial_complex_d2(N,p1,p2):
     G = nx.fast_gnp_random_graph(N, p1, seed=None)
     
     if not nx.is_connected(G):
-        giant = max(nx.connected_component_subgraphs(G), key=len)
-        print 'not connected, but GC has order ', giant.order(), 'and size', giant.size()
-        G = giant
+        giant = list(nx.connected_components(G))[0]
+        G = nx.subgraph(G, giant)
+        print('not connected, but GC has order %i ans size %i'%(len(giant), G.size())) 
 
     triangles_list = []
+    G_copy = G.copy()
     
     #Now I run over all the possible combinations of three elements:
     for tri in combinations(list(G.nodes()),3):
@@ -202,13 +204,15 @@ def generate_my_simplicial_complex_d2(N,p1,p2):
             triangles_list.append(tri)
             
             #Now I also need to add the new links to the graph created by the triangle
-            G.add_edge(tri[0], tri[1])
-            G.add_edge(tri[1], tri[2])
-            G.add_edge(tri[0], tri[2])
+            G_copy.add_edge(tri[0], tri[1])
+            G_copy.add_edge(tri[1], tri[2])
+            G_copy.add_edge(tri[0], tri[2])
+            
+    G = G_copy
              
     #Creating a dictionary of neighbors
     node_neighbors_dict = {}
-    for n in G.nodes():
+    for n in list(G.nodes()):
         node_neighbors_dict[n] = G[n].keys()           
                 
     #print len(triangles_list), 'triangles created. Size now is', G.size()
